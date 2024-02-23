@@ -1,0 +1,16 @@
+{
+    "openconfig-system:server":
+        {
+            "address": "{{ item.add_server_ip }}",
+            "config":{
+                "address": "{{ item.add_server_ip }}"
+            },
+            "radius":{
+                "config":{
+                    "auth-port": "{{ item.add_server_port }}",
+                    "secret-key": "{{ item.add_server_secret }}",
+                    "f5-openconfig-aaa-radius:timeout":5
+                }
+            }
+        }
+}

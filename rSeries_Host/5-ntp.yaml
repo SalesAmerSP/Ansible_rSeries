@@ -1,0 +1,75 @@
+---
+- name: NTP functions 
+  hosts: [rSeries]
+  gather_facts: no
+  connection: local 
+
+  vars: 
+    ntp_servers: 
+      - 0.us.pool.ntp.org
+      - 1.us.pool.ntp.org
+      - 2.us.pool.ntp.org
+      - pool.ntp.org
+    time_zone: Etc/GMT-8
+
+  tasks:
+
+  - name: Login via uri (basic auth) Get token 
+    tags: basic
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/aaa'
+      return_content: true 
+      force_basic_auth: true
+      method: GET
+      user: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+      headers:
+        Content-Type: application/yang-data+json
+      validate_certs: false
+    register: token
+
+  - name: Get ntp info 
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/ntp'
+      return_content: true 
+      method: GET
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 200, 204
+    register: ntp_list
+
+  - name: show ntp 
+    ansible.builtin.debug:
+      var: ntp_list['json']['openconfig-system:ntp']
+
+  - name: Add ntp server(s)
+    tags: ntp_servers
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/ntp/openconfig-system:servers'
+      return_content: true 
+      method: POST
+      body_format: json
+      body: {"server": [{"address": "{{ item }}","config":{"address": "{{ item }}"}}]}
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 201
+    register: ntp_add
+    loop: "{{ ntp_servers }}"
+
+  - name: Set system time zone
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/clock'
+      return_content: true 
+      method: PUT
+      body_format: json
+      body: {"openconfig-system:clock":{"config":{"timezone-name":"{{ time_zone }}"}}}
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 204
+    register: ntp_tz

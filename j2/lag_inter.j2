@@ -1,0 +1,20 @@
+{
+    "openconfig-interfaces:interfaces": {
+        "interface": [
+          {% set comma = joiner(",") %}
+          {% for interface in lag_interfaces %} {{ comma() }}
+            {
+                "name": "{{ interface }}",
+                "config": {
+                    "name": "{{ interface }}"
+                },
+                "openconfig-if-ethernet:ethernet": {
+                    "config": {
+                        "openconfig-if-aggregate:aggregate-id": "{{ lag_name }}"
+                    }
+                }
+            }
+          {% endfor %}
+        ]
+    }
+}

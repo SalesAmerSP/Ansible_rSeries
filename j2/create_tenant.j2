@@ -1,0 +1,29 @@
+{
+    "tenant": [
+        {
+            "name": "{{ tenant_name }}",
+            "config": {
+                "image": "{{ tenant_image }}",
+                "nodes": [
+                    {% set comma = joiner(",") %}
+                    {% for n in nodes %}
+                        {{ comma() }} {{ n }}
+                    {% endfor %}
+                ],
+                "mgmt-ip": "{{ tenant_mgmt_ip }}",
+                "gateway": "{{ mgmt_gw }}",
+                "prefix-length": 24,
+                "vlans": [
+                    {% set comma = joiner(",") %}
+                    {% for v in vlans %}
+                        {{ comma() }} {{ v }}
+                    {% endfor %}
+                ],
+                "vcpu-cores-per-node": "{{ cores }}",
+                "memory": "{{ mem }}",
+                "cryptos": "enabled",
+                "running-state": "configured"
+            }
+        }
+    ]
+}

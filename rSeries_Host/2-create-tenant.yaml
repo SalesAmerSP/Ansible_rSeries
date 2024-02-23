@@ -1,0 +1,71 @@
+---
+- name: Create new tenant 
+  hosts: [rSeries]
+  gather_facts: no
+  connection: local 
+
+  vars_files:
+    - create_tenant_vars.yaml
+
+  tasks:
+
+  - name: Login via uri (basic auth) Get token
+    tags: basic
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/aaa'
+      return_content: true
+      force_basic_auth: true
+      method: GET
+      user: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+      headers:
+        Content-Type: application/yang-data+json
+      validate_certs: false
+    register: token
+
+  - name: Create new tenant
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/f5-tenants:tenants'
+      return_content: true
+      method: POST
+      body_format: json
+      body: "{{ lookup('ansible.builtin.template', '../j2/create_tenant.j2') }}"
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 201
+    register: tenant
+
+  - name: Debug tenant
+    ansible.builtin.debug:
+      var: tenant['failed']
+
+  - name: Run Tenant
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/f5-tenants:tenants/tenant={{ tenant_name }}/config/running-state'
+      return_content: true
+      method: PATCH
+      body_format: json
+      body: {"running-state": "deployed"}
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 204
+    register: tenant_run
+
+  - name: Check tenant status Running
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/f5-tenants:tenants/tenant={{ tenant_name }}'
+      return_content: true
+      method: GET
+      body_format: json
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+    register: tenant_instances
+    until: tenant_instances['json']['f5-tenants:tenant'][0]['state']['instances']['instance'][0]['phase'] == "Running"
+    retries: 5
+    delay: 30

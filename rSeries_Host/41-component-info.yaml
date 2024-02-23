@@ -1,0 +1,41 @@
+---
+- name: Login for token
+  hosts: [rSeries]
+  gather_facts: falsse
+  connection: local
+
+  tasks:
+
+  - name: Login via uri (basic auth) Get token
+    tags: basic
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/aaa'
+      return_content: true
+      force_basic_auth: true
+      method: GET
+      user: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+      headers:
+        Content-Type: application/yang-data+json
+      validate_certs: false
+    register: token
+
+  - name: Get all component info
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-platform:components'
+      return_content: true
+      method: GET
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+    register: component
+
+  - name: Show component
+    ansible.builtin.debug:
+      var: component['json']['openconfig-platform:components']['component']
+
+  - name: Component info to file
+    ansible.builtin.copy:
+      content: "{{ component['json']['openconfig-platform:components']['component'] | to_nice_json }}"
+      dest: ../health/{{inventory_hostname}}_component.json

@@ -1,0 +1,90 @@
+---
+- name: Radius
+  hosts: [rSeries]
+  gather_facts: false
+  connection: local
+
+  vars:
+    server_grp_name: radius_clear
+    server_grp_type: RADIUS
+    sg:
+      - add_server_ip: 10.1.10.200
+        add_server_port: 1812
+        add_server_secret: "secret"
+      - add_server_ip: 10.1.10.201
+        add_server_port: 1812
+        add_server_secret: "secret"
+
+  tasks:
+
+  - name: Login via uri (basic auth) Get token
+    tags: basic
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/aaa'
+      return_content: true
+      force_basic_auth: true
+      method: GET
+      user: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+      headers:
+        Content-Type: application/yang-data+json
+      validate_certs: false
+    register: token
+
+  - name: Get radius info
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/aaa'
+      return_content: true
+      method: GET
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+    register: aaa_info
+
+  - name: Show aaa_info
+    ansible.builtin.debug:
+      var: aaa_info['json']
+ 
+  - name: Create server group
+    tags: create
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/aaa/server-groups'
+      return_content: true
+      method: POST
+      body_format: json
+      body: "{{ lookup('ansible.builtin.template', '../j2/create_server_grp.j2') }}"
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 201
+    register: server_grp
+
+  - name: Add servers to server group
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/aaa/server-groups/server-group={{server_grp_name}}/servers'
+      return_content: true
+      method: POST
+      body_format: json
+      body: "{{ lookup('ansible.builtin.template', '../j2/add_server_grp.j2') }}"
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 201
+    register: add_server
+    loop: "{{ sg }}"
+
+  - name: Delete server group
+    tags: delete
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/aaa/server-groups/server-group={{server_grp_name}}'
+      return_content: true
+      method: DELETE
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 204
+    register: delete_server

@@ -1,0 +1,27 @@
+{
+    "openconfig-interfaces:interfaces": {
+        "interface": [
+            {
+                "name": "{{ lag_name }}",
+                "config": {
+                    "name": "{{ lag_name }}",
+                    "type": "iana-if-type:ieee8023adLag",
+                    "enabled": true
+                },
+                "openconfig-if-aggregate:aggregation": {
+                    "config": {
+                        "lag-type": "LACP",
+                        "f5-if-aggregate:distribution-hash": "src-dst-ipport"
+                    },
+                    "openconfig-vlan:switched-vlan": {
+                        "config": {
+                            "trunk-vlans": [
+                                440
+                            ]
+                        }
+                    }
+                }
+            }
+        ]
+    }
+}

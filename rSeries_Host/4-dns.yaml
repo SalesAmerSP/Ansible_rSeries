@@ -1,0 +1,57 @@
+---
+- name: Login for token 
+  hosts: [rSeries]
+  gather_facts: no
+  connection: local 
+
+  tasks:
+
+  - name: Login via uri (basic auth) Get token 
+    tags: basic
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/aaa'
+      return_content: true 
+      force_basic_auth: true
+      method: GET
+      user: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+      headers:
+        Content-Type: application/yang-data+json
+      validate_certs: false
+    register: token
+
+  - name: Get dns info
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/dns'
+      return_content: true 
+      method: GET
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+    register: dns
+
+  - name: Show dns
+    ansible.builtin.debug: 
+      msg: "{{ item.address }}"
+    loop: "{{ dns['json']['openconfig-system:dns']['servers']['server'] }}"
+
+  - name: Add DNS server
+    tags: add
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/dns/servers'
+      return_content: true 
+      method: POST
+      body_format: json 
+      body: {"server":[{"address":"10.154.1.242"}]}
+      status_code: 201
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+    register: add_dns
+
+  - name: Add dns
+    tags: add
+    ansible.builtin.debug: 
+      msg: add_dns

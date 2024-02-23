@@ -1,0 +1,46 @@
+---
+- name: Login for token
+  hosts: [rSeries]
+  gather_facts: false
+  connection: local
+
+  vars:
+    remote_url: ""<myf5.com_resources_download_link>""
+
+  tasks:
+
+  - name: Run regex
+    ansible.builtin.set_fact:
+      fname: "{{ remote_url | ansible.builtin.regex_search('[^\\/]+(?=\\?[^\\/]*$)') | urldecode }}"
+
+  - name: Login via uri (basic auth) Get token
+    tags: basic
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/aaa'
+      return_content: true
+      force_basic_auth: true
+      method: GET
+      user: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+      headers:
+        Content-Type: application/yang-data+json
+      validate_certs: false
+    register: token
+
+  - name: Upload Image to host
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/f5-utils-file-transfer:file/import'
+      return_content: true
+      method: POST
+      body_format: json
+      body: "{{ lookup('ansible.builtin.template', '../j2/upload-f5os.j2') }}"
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 200, 201
+    register: image
+
+  - name: Show Tenant
+    ansible.builtin.debug:
+      var: image

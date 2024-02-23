@@ -1,0 +1,16 @@
+{
+    "allowed-ip": [
+        {% set comma = joiner(",") %}
+        {% for acl in acls %}{{ comma() }}
+        {
+            "name": "{{ acl.acl_name }}",
+            "config": {
+                "ipv4": {
+                    "address": "{{ acl.acl_ip }}",
+                    "prefix-length": "{{ acl.acl_prefixLength }}",
+                    "port": {{ acl.acl_port }}
+                }
+            }
+        }{% endfor %}
+    ]
+}
