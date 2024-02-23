@@ -1,0 +1,87 @@
+---
+- name: Generate qkview 
+  hosts: [rSeries]
+  gather_facts: no
+  connection: local 
+
+  vars:
+    qkview_fname: "{{ inventory_hostname }}"
+    exclude_core: true
+
+  tasks:
+
+  - name: Login via uri (basic auth) Get token 
+    tags: basic, file
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/aaa'
+      return_content: true 
+      force_basic_auth: true
+      method: GET
+      user: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+      headers:
+        Content-Type: application/yang-data+json
+      validate_certs: false
+    register: token
+
+  - name: Generate qkview 
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/qkview/capture'
+      return_content: true 
+      method: POST
+      body_format: json
+      body: {"filename":"{{ qkview_fname }}","maxfilesize":100,"timeout":3600,"exclude-cores": "{{ exclude_core }}" }
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+    register: qkv
+
+  - name: Get qkview status 
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/f5-system-diagnostics-qkview:diagnostics/qkview/status'
+      return_content: true 
+      method: POST
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+    register: qk_status 
+    until: qk_status['json']['f5-system-diagnostics-qkview:output']['result'] | from_json | json_query('Percent') == 100
+    retries: 5
+    delay: 150
+
+  - name: List qkview file
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/f5-utils-file-transfer:file/list'
+      return_content: true 
+      method: POST
+      body_format: json
+      body: {"path":"diags/shared/qkview"}
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+    register: qk_list 
+
+  - name: Show file list
+    ansible.builtin.debug:
+      var: qk_list['json']['f5-utils-file-transfer:output']['entries']
+
+  - name: Download qkview file
+    tags: file
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/f5-utils-file-transfer:file/f5-file-download:download-file/f5-file-download:start-download'
+      method: POST
+      body_format: form-multipart
+      body: 
+        file-name: "{{ qkview_fname }}"
+        file-path: "diags/shared/"
+        token: "{{ token.x_auth_token }}" 
+      headers:
+        Content-Type : multipart/form-data
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      dest: ../health/{{ qkview_fname }}
+      status_code: 200
+      validate_certs: false

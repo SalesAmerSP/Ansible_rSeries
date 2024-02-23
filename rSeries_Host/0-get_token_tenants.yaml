@@ -1,0 +1,43 @@
+---
+- name: Login for token
+  hosts: [rSeries]
+  gather_facts: false
+  connection: local
+
+  tasks:
+
+  - name: Login via uri (basic auth) Get token
+    tags: basic
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/aaa'
+      return_content: true
+      force_basic_auth: true
+      method: GET
+      user: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+      headers:
+        Content-Type: application/yang-data+json
+      validate_certs: false
+    register: token
+
+  - name: Get Tenant info
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/f5-tenants:tenants'
+      return_content: true
+      method: GET
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 200, 204
+    register: tenant
+
+  - name: Show Tenant
+    ansible.builtin.debug:
+      var: tenant['json']['f5-tenants:tenants']
+    when: tenant['status'] == 200
+
+  - name: Show Tenant Filter (name mgmt-ip only)
+    ansible.builtin.debug:
+      msg: "{{ tenant['json']['f5-tenants:tenants'] | community.general.json_query('tenant[*].config.{Name: name,MGMT: \"mgmt-ip\"}')  }}"
+    when: tenant['status'] == 200

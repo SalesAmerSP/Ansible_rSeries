@@ -1,0 +1,18 @@
+{
+    "ietf-restconf:data": {
+        "openconfig-lacp:lacp": {
+            "interfaces": {
+                "interface": [
+                    {
+                        "name": "{{ lag_name }}",
+                        "config": {
+                            "name": "{{ lag_name }}",
+                            "interval": "FAST",
+                            "lacp-mode": "ACTIVE"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

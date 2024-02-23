@@ -1,0 +1,37 @@
+---
+- name: Create MGMT ACL
+  hosts: [rSeries]
+  gather_facts: false
+  connection: local
+
+  tasks:
+
+  - name: Login via uri (basic auth) Get token
+    tags: basic
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/aaa'
+      return_content: true
+      force_basic_auth: true
+      method: GET
+      user: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+      headers:
+        Content-Type: application/yang-data+json
+      validate_certs: false
+    register: token
+
+  - name: Get ACL info 
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/f5-reset-counters:reset/f5-reset-mgmt-counters:mgmt-counters'
+      return_content: false
+      method: POST
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 204
+    register: mgmt_counter_info
+
+  - name: Show ACL info
+    ansible.builtin.debug:
+      var: mgmt_counter_info

@@ -1,0 +1,98 @@
+---
+- name: LAG
+  hosts: [rSeries]
+  gather_facts: false
+  connection: local
+
+  vars:
+    lag_name: "Arista"
+    lag_interfaces:
+      - "3.0"
+      - "4.0"
+
+  tasks:
+
+  - name: Login via uri (basic auth) Get token
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/aaa'
+      return_content: true
+      force_basic_auth: true
+      method: GET
+      user: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+      headers:
+        Content-Type: application/yang-data+json
+      validate_certs: false
+    register: token
+
+  - name: Get LAG info
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-lacp:lacp'
+      return_content: true
+      method: GET
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+    register: lag_info
+
+  - name: Show lag_info
+    ansible.builtin.debug:
+      var: lag_info['json']
+
+  - name: Delete LAG Interface
+    tags: del_lag
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-interfaces:interfaces/interface={{ lag_name }}'
+      return_content: true
+      method: GET
+      body_format: json
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 200, 204
+    register: lag_members
+
+  - name: Create list of LAG members
+    ansible.builtin.set_fact:
+      lag_int: "{{ lag_members['json']['openconfig-interfaces:interface'][0]['openconfig-if-aggregate:aggregation']['state']['f5-if-aggregate:members'] | community.general.json_query('member[*].\"member-name\"') | list }}"
+
+  - name: Remove LAG members
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-interfaces:interfaces/interface={{ item }}/openconfig-if-ethernet:ethernet/config/openconfig-if-aggregate:aggregate-id'
+      return_content: true
+      method: DELETE
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 204
+    register: lag_int_del
+    loop: "{{ lag_int }}"
+
+  - name: Delete LAG Interface
+    tags: del_lag
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-lacp:lacp/interfaces/interface={{ lag_name }}'
+      return_content: true
+      method: DELETE
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 204
+    register: lag_del
+
+  - name: Delete LAG Interface second step
+    tags: del_lag
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-interfaces:interfaces/interface={{ lag_name }}'
+      return_content: true
+      method: DELETE
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 204
+    register: lag_del

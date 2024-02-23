@@ -1,0 +1,11 @@
+{
+    "openconfig-vlan:vlans": {
+        "vlan": [{
+            "vlan-id": 20,
+            "config": {
+                "vlan-id": 20, 
+                "name": "vlan-test"
+            }
+        }]
+    }
+}

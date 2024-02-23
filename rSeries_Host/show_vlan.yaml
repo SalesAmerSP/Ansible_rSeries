@@ -1,0 +1,56 @@
+---
+- name: Login for token 
+  hosts: [rSeries]
+  gather_facts: no
+  connection: local 
+
+  tasks:
+
+  - name: Login via uri (basic auth) Get token 
+    tags: basic
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/aaa'
+      return_content: true 
+      force_basic_auth: true
+      method: GET
+      user: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+      headers:
+        Content-Type: application/yang-data+json
+      validate_certs: false
+    register: token
+
+  - name: Get VLAN info
+    tags: basic
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-vlan:vlans'
+      return_content: true 
+      method: GET
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+    register: vlan
+
+  - name: Show Vlan
+    tags: basic
+    ansible.builtin.debug: 
+      var: vlan['json']['openconfig-vlan:vlans']['vlan']
+
+  - name: Change Vlan desc 
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data'
+      return_content: true 
+      method: PATCH 
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      body_format: json
+      body: "{{ lookup('ansible.builtin.file', 'vlan_name.json') }}"
+      validate_certs: false
+      status_code: 204
+    register: vlan_name 
+
+  - name: Show new name 
+    ansible.builtin.debug:
+      var: vlan_name

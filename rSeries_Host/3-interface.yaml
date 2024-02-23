@@ -1,0 +1,76 @@
+---
+- name: Interface 
+  hosts: [rSeries]
+  gather_facts: no
+  connection: local 
+
+  vars:
+    state_bool: true
+
+  tasks:
+
+  - name: Login via uri (basic auth) Get token 
+    tags: basic
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/aaa'
+      return_content: true 
+      force_basic_auth: true
+      method: GET
+      user: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+      headers:
+        Content-Type: application/yang-data+json
+      validate_certs: false
+    register: token
+
+  - name: Get ALL interfaces 
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-interfaces:interfaces'
+      return_content: true 
+      method: GET
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 200
+    register: all_int
+
+  - name: Show interface 
+    ansible.builtin.debug:
+      var: all_int
+
+  - name: Get interface 2
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-interfaces:interfaces/interface=2.0'
+      return_content: true 
+      method: GET
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 200
+    register: int_2
+
+  - name: Show interface 
+    ansible.builtin.debug:
+      var: int_2
+
+  - name: Enable/Disable interface 2
+    tags: diasable_int2
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-interfaces:interfaces'
+      return_content: true 
+      method: PATCH
+      body_format: json 
+      body: "{{ lookup('ansible.builtin.template', '../j2/state_int.j2') }}"
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 204
+    register: state_int_2
+
+  - name: Show interface
+    tags: disable_int2
+    ansible.builtin.debug:
+      var: state_int_2

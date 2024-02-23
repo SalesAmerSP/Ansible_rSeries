@@ -1,0 +1,804 @@
+[
+    {
+        "config": {
+            "f5-platform-lcd:mode": "standard",
+            "name": "lcd"
+        },
+        "name": "lcd",
+        "state": {
+            "empty": false,
+            "f5-platform-lcd:mode": "standard",
+            "part-no": "SUB-0872-03 REV A",
+            "serial-no": "sub0872g00n1"
+        }
+    },
+    {
+        "config": {
+            "name": "platform"
+        },
+        "cpu": {
+            "state": {
+                "f5-platform:cpu-threads": {
+                    "cpu-thread": [
+                        {
+                            "current": 0,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 0,
+                            "one-minute-avg": 1,
+                            "thread": "cpu0",
+                            "thread-index": 0
+                        },
+                        {
+                            "current": 0,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 0,
+                            "one-minute-avg": 0,
+                            "thread": "cpu1",
+                            "thread-index": 1
+                        },
+                        {
+                            "current": 0,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 0,
+                            "one-minute-avg": 1,
+                            "thread": "cpu2",
+                            "thread-index": 2
+                        },
+                        {
+                            "current": 0,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 1,
+                            "thread": "cpu3",
+                            "thread-index": 3
+                        },
+                        {
+                            "current": 0,
+                            "five-minute-avg": 0,
+                            "five-second-avg": 0,
+                            "one-minute-avg": 0,
+                            "thread": "cpu4",
+                            "thread-index": 4
+                        },
+                        {
+                            "current": 0,
+                            "five-minute-avg": 0,
+                            "five-second-avg": 0,
+                            "one-minute-avg": 0,
+                            "thread": "cpu5",
+                            "thread-index": 5
+                        },
+                        {
+                            "current": 1,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 2,
+                            "thread": "cpu6",
+                            "thread-index": 6
+                        },
+                        {
+                            "current": 1,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 1,
+                            "thread": "cpu7",
+                            "thread-index": 7
+                        },
+                        {
+                            "current": 0,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 1,
+                            "thread": "cpu8",
+                            "thread-index": 8
+                        },
+                        {
+                            "current": 0,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 1,
+                            "thread": "cpu9",
+                            "thread-index": 9
+                        },
+                        {
+                            "current": 1,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 1,
+                            "thread": "cpu10",
+                            "thread-index": 10
+                        },
+                        {
+                            "current": 3,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 2,
+                            "one-minute-avg": 1,
+                            "thread": "cpu11",
+                            "thread-index": 11
+                        },
+                        {
+                            "current": 2,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 2,
+                            "one-minute-avg": 1,
+                            "thread": "cpu12",
+                            "thread-index": 12
+                        },
+                        {
+                            "current": 1,
+                            "five-minute-avg": 2,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 2,
+                            "thread": "cpu13",
+                            "thread-index": 13
+                        },
+                        {
+                            "current": 0,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 2,
+                            "thread": "cpu14",
+                            "thread-index": 14
+                        },
+                        {
+                            "current": 1,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 1,
+                            "thread": "cpu15",
+                            "thread-index": 15
+                        },
+                        {
+                            "current": 2,
+                            "five-minute-avg": 2,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 1,
+                            "thread": "cpu16",
+                            "thread-index": 16
+                        },
+                        {
+                            "current": 1,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 2,
+                            "one-minute-avg": 1,
+                            "thread": "cpu17",
+                            "thread-index": 17
+                        },
+                        {
+                            "current": 2,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 1,
+                            "thread": "cpu18",
+                            "thread-index": 18
+                        },
+                        {
+                            "current": 2,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 2,
+                            "one-minute-avg": 1,
+                            "thread": "cpu19",
+                            "thread-index": 19
+                        },
+                        {
+                            "current": 10,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 3,
+                            "one-minute-avg": 1,
+                            "thread": "cpu20",
+                            "thread-index": 20
+                        },
+                        {
+                            "current": 1,
+                            "five-minute-avg": 2,
+                            "five-second-avg": 2,
+                            "one-minute-avg": 1,
+                            "thread": "cpu21",
+                            "thread-index": 21
+                        },
+                        {
+                            "current": 3,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 1,
+                            "thread": "cpu22",
+                            "thread-index": 22
+                        },
+                        {
+                            "current": 2,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 1,
+                            "thread": "cpu23",
+                            "thread-index": 23
+                        },
+                        {
+                            "current": 2,
+                            "five-minute-avg": 2,
+                            "five-second-avg": 2,
+                            "one-minute-avg": 1,
+                            "thread": "cpu24",
+                            "thread-index": 24
+                        },
+                        {
+                            "current": 0,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 0,
+                            "one-minute-avg": 1,
+                            "thread": "cpu25",
+                            "thread-index": 25
+                        },
+                        {
+                            "current": 0,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 1,
+                            "thread": "cpu26",
+                            "thread-index": 26
+                        },
+                        {
+                            "current": 0,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 1,
+                            "thread": "cpu27",
+                            "thread-index": 27
+                        },
+                        {
+                            "current": 0,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 0,
+                            "one-minute-avg": 1,
+                            "thread": "cpu28",
+                            "thread-index": 28
+                        },
+                        {
+                            "current": 1,
+                            "five-minute-avg": 1,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 1,
+                            "thread": "cpu29",
+                            "thread-index": 29
+                        },
+                        {
+                            "current": 1,
+                            "five-minute-avg": 2,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 2,
+                            "thread": "cpu30",
+                            "thread-index": 30
+                        },
+                        {
+                            "current": 1,
+                            "five-minute-avg": 2,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 2,
+                            "thread": "cpu31",
+                            "thread-index": 31
+                        },
+                        {
+                            "current": 63,
+                            "five-minute-avg": 4,
+                            "five-second-avg": 16,
+                            "one-minute-avg": 3,
+                            "thread": "cpu32",
+                            "thread-index": 32
+                        },
+                        {
+                            "current": 0,
+                            "five-minute-avg": 3,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 3,
+                            "thread": "cpu33",
+                            "thread-index": 33
+                        },
+                        {
+                            "current": 1,
+                            "five-minute-avg": 2,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 1,
+                            "thread": "cpu34",
+                            "thread-index": 34
+                        },
+                        {
+                            "current": 0,
+                            "five-minute-avg": 3,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 2,
+                            "thread": "cpu35",
+                            "thread-index": 35
+                        },
+                        {
+                            "current": 0,
+                            "five-minute-avg": 2,
+                            "five-second-avg": 2,
+                            "one-minute-avg": 2,
+                            "thread": "cpu36",
+                            "thread-index": 36
+                        },
+                        {
+                            "current": 0,
+                            "five-minute-avg": 2,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 1,
+                            "thread": "cpu37",
+                            "thread-index": 37
+                        },
+                        {
+                            "current": 0,
+                            "five-minute-avg": 4,
+                            "five-second-avg": 5,
+                            "one-minute-avg": 7,
+                            "thread": "cpu38",
+                            "thread-index": 38
+                        },
+                        {
+                            "current": 1,
+                            "five-minute-avg": 3,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 4,
+                            "thread": "cpu39",
+                            "thread-index": 39
+                        },
+                        {
+                            "current": 1,
+                            "five-minute-avg": 2,
+                            "five-second-avg": 3,
+                            "one-minute-avg": 2,
+                            "thread": "cpu40",
+                            "thread-index": 40
+                        },
+                        {
+                            "current": 5,
+                            "five-minute-avg": 3,
+                            "five-second-avg": 4,
+                            "one-minute-avg": 2,
+                            "thread": "cpu41",
+                            "thread-index": 41
+                        },
+                        {
+                            "current": 2,
+                            "five-minute-avg": 3,
+                            "five-second-avg": 2,
+                            "one-minute-avg": 3,
+                            "thread": "cpu42",
+                            "thread-index": 42
+                        },
+                        {
+                            "current": 0,
+                            "five-minute-avg": 3,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 3,
+                            "thread": "cpu43",
+                            "thread-index": 43
+                        },
+                        {
+                            "current": 73,
+                            "five-minute-avg": 4,
+                            "five-second-avg": 22,
+                            "one-minute-avg": 3,
+                            "thread": "cpu44",
+                            "thread-index": 44
+                        },
+                        {
+                            "current": 10,
+                            "five-minute-avg": 5,
+                            "five-second-avg": 4,
+                            "one-minute-avg": 2,
+                            "thread": "cpu45",
+                            "thread-index": 45
+                        },
+                        {
+                            "current": 3,
+                            "five-minute-avg": 3,
+                            "five-second-avg": 1,
+                            "one-minute-avg": 5,
+                            "thread": "cpu46",
+                            "thread-index": 46
+                        },
+                        {
+                            "current": 4,
+                            "five-minute-avg": 2,
+                            "five-second-avg": 2,
+                            "one-minute-avg": 4,
+                            "thread": "cpu47",
+                            "thread-index": 47
+                        }
+                    ]
+                },
+                "f5-platform:cpu-utilization": {
+                    "current": 4,
+                    "five-minute-avg": 2,
+                    "five-second-avg": 2,
+                    "one-minute-avg": 2,
+                    "thread": "cpu"
+                },
+                "f5-platform:processors": {
+                    "processor": [
+                        {
+                            "cpu-index": 0,
+                            "state": {
+                                "cachesize": "36864(KB)",
+                                "core-cnt": "24",
+                                "freq": "2401.000(MHz)",
+                                "modelname": "Intel(R) Xeon(R) Gold 6312U CPU @ 2.40GHz",
+                                "stepping": "6",
+                                "thread-cnt": "48"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "f5-fan-psu-stats:fantray": {
+            "fan-stats": {
+                "fan-1-speed": 16251,
+                "fan-10-speed": 16198,
+                "fan-11-speed": 16181,
+                "fan-12-speed": 16260,
+                "fan-2-speed": 16155,
+                "fan-3-speed": 16304,
+                "fan-4-speed": 16366,
+                "fan-5-speed": 16268,
+                "fan-6-speed": 16286,
+                "fan-7-speed": 16260,
+                "fan-8-speed": 16286,
+                "fan-9-speed": 16260
+            }
+        },
+        "integrated-circuit": {
+            "state": {
+                "f5-platform:fpgas": {
+                    "fpga": [
+                        {
+                            "fpga-index": "asw_0",
+                            "state": {
+                                "version": "71.3.8"
+                            }
+                        },
+                        {
+                            "f5-host-endpoint:host-endpoints": {
+                                "host-endpoint": [
+                                    {
+                                        "did": 15,
+                                        "id": 0,
+                                        "num_dms": 3,
+                                        "num_seps": 64,
+                                        "slot": 1
+                                    }
+                                ]
+                            },
+                            "fpga-index": "atse_0",
+                            "state": {
+                                "version": "72.4.2"
+                            }
+                        },
+                        {
+                            "f5-host-endpoint:host-endpoints": {
+                                "host-endpoint": [
+                                    {
+                                        "did": 63,
+                                        "id": 1,
+                                        "num_dms": 3,
+                                        "num_seps": 64,
+                                        "slot": 1
+                                    }
+                                ]
+                            },
+                            "fpga-index": "atse_1",
+                            "state": {
+                                "version": "72.4.2"
+                            }
+                        },
+                        {
+                            "fpga-index": "nso_0",
+                            "state": {
+                                "version": "70.3.8"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "name": "platform",
+        "properties": {
+            "property": [
+                {
+                    "config": {
+                        "name": "QAT0"
+                    },
+                    "name": "QAT0",
+                    "state": {
+                        "configurable": false,
+                        "value": "Lewisburg C62X Crypto/Compression"
+                    }
+                },
+                {
+                    "config": {
+                        "name": "QAT1"
+                    },
+                    "name": "QAT1",
+                    "state": {
+                        "configurable": false,
+                        "value": "Lewisburg C62X Crypto/Compression"
+                    }
+                },
+                {
+                    "config": {
+                        "name": "QAT2"
+                    },
+                    "name": "QAT2",
+                    "state": {
+                        "configurable": false,
+                        "value": "Lewisburg C62X Crypto/Compression"
+                    }
+                },
+                {
+                    "config": {
+                        "name": "QAT3"
+                    },
+                    "name": "QAT3",
+                    "state": {
+                        "configurable": false,
+                        "value": "Lewisburg C62X Crypto/Compression"
+                    }
+                },
+                {
+                    "config": {
+                        "name": "QAT4"
+                    },
+                    "name": "QAT4",
+                    "state": {
+                        "configurable": false,
+                        "value": "Lewisburg C62X Crypto/Compression"
+                    }
+                },
+                {
+                    "config": {
+                        "name": "QAT5"
+                    },
+                    "name": "QAT5",
+                    "state": {
+                        "configurable": false,
+                        "value": "Lewisburg C62X Crypto/Compression"
+                    }
+                },
+                {
+                    "config": {
+                        "name": "fw-version-bios"
+                    },
+                    "name": "fw-version-bios",
+                    "state": {
+                        "configurable": false,
+                        "f5-platform:update-status": "none",
+                        "value": "2.01.134.1"
+                    }
+                },
+                {
+                    "config": {
+                        "name": "fw-version-bios-me"
+                    },
+                    "name": "fw-version-bios-me",
+                    "state": {
+                        "configurable": false,
+                        "f5-platform:update-status": "none",
+                        "value": "4.4.4.301"
+                    }
+                },
+                {
+                    "config": {
+                        "name": "fw-version-cpld"
+                    },
+                    "name": "fw-version-cpld",
+                    "state": {
+                        "configurable": false,
+                        "f5-platform:update-status": "none",
+                        "value": "02.0B.00"
+                    }
+                },
+                {
+                    "config": {
+                        "name": "fw-version-drive-u.2.slot1"
+                    },
+                    "name": "fw-version-drive-u.2.slot1",
+                    "state": {
+                        "configurable": false,
+                        "f5-platform:update-status": "none",
+                        "value": "VDV10184"
+                    }
+                },
+                {
+                    "config": {
+                        "name": "fw-version-drive-u.2.slot2"
+                    },
+                    "name": "fw-version-drive-u.2.slot2",
+                    "state": {
+                        "configurable": false,
+                        "f5-platform:update-status": "none",
+                        "value": "VDV10184"
+                    }
+                },
+                {
+                    "config": {
+                        "name": "fw-version-lcd-app"
+                    },
+                    "name": "fw-version-lcd-app",
+                    "state": {
+                        "configurable": false,
+                        "f5-platform:update-status": "none",
+                        "value": "1.01.067.00.1"
+                    }
+                },
+                {
+                    "config": {
+                        "name": "fw-version-lcd-bootloader"
+                    },
+                    "name": "fw-version-lcd-bootloader",
+                    "state": {
+                        "configurable": false,
+                        "f5-platform:update-status": "none",
+                        "value": "1.01.027.00.1"
+                    }
+                },
+                {
+                    "config": {
+                        "name": "fw-version-lcd-ui"
+                    },
+                    "name": "fw-version-lcd-ui",
+                    "state": {
+                        "configurable": false,
+                        "f5-platform:update-status": "none",
+                        "value": "1.11.0"
+                    }
+                },
+                {
+                    "config": {
+                        "name": "fw-version-lop-app"
+                    },
+                    "name": "fw-version-lop-app",
+                    "state": {
+                        "configurable": false,
+                        "f5-platform:update-status": "none",
+                        "value": "2.00.292.0.1"
+                    }
+                },
+                {
+                    "config": {
+                        "name": "fw-version-lop-bootloader"
+                    },
+                    "name": "fw-version-lop-bootloader",
+                    "state": {
+                        "configurable": false,
+                        "f5-platform:update-status": "none",
+                        "value": "1.02.062.0.1"
+                    }
+                },
+                {
+                    "config": {
+                        "name": "fw-version-sirr"
+                    },
+                    "name": "fw-version-sirr",
+                    "state": {
+                        "configurable": false,
+                        "f5-platform:update-status": "none",
+                        "value": "1.1.55"
+                    }
+                }
+            ]
+        },
+        "state": {
+            "description": "r10900",
+            "empty": false,
+            "f5-platform:memory": {
+                "available": "17739571200",
+                "free": "6804725760",
+                "platform-total": "26845536256",
+                "platform-used": "8499228672",
+                "used-percent": 93
+            },
+            "f5-platform:temperature": {
+                "average": "20.2",
+                "current": "20.2",
+                "maximum": "20.4",
+                "minimum": "20.2"
+            },
+            "f5-platform:tpm-integrity-status": "Valid",
+            "part-no": "203-0413-03 REV A",
+            "serial-no": "f5-vvhe-kmls"
+        },
+        "storage": {
+            "state": {
+                "f5-platform:disks": {
+                    "disk": [
+                        {
+                            "disk-name": "nvme0n1",
+                            "state": {
+                                "disk-io": {
+                                    "read-bytes": "11615131591",
+                                    "read-iops": "48138799",
+                                    "read-latency-ms": "5443084",
+                                    "read-merged": "46220249",
+                                    "total-iops": "186553929",
+                                    "write-bytes": "23033819641",
+                                    "write-iops": "1195881752",
+                                    "write-latency-ms": "158491133",
+                                    "write-merged": "1098405155"
+                                },
+                                "model": "INTEL SSDPE2KX010T8",
+                                "serial-no": "PHLJ024100KV1P0FGN",
+                                "size": "735.00GB",
+                                "type": "nvme",
+                                "vendor": "Intel",
+                                "version": "VDV10184"
+                            }
+                        },
+                        {
+                            "disk-name": "nvme1n1",
+                            "state": {
+                                "disk-io": {
+                                    "read-bytes": "11560340208",
+                                    "read-iops": "46344973",
+                                    "read-latency-ms": "5251851",
+                                    "read-merged": "46205679",
+                                    "total-iops": "185693176",
+                                    "write-bytes": "23033819641",
+                                    "write-iops": "1195881742",
+                                    "write-latency-ms": "152266014",
+                                    "write-merged": "1098405165"
+                                },
+                                "model": "INTEL SSDPE2KX010T8",
+                                "serial-no": "PHLJ024102WU1P0FGN",
+                                "size": "735.00GB",
+                                "type": "nvme",
+                                "vendor": "Intel",
+                                "version": "VDV10184"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "config": {
+            "name": "psu-1"
+        },
+        "f5-fan-psu-stats:psu-stats": {
+            "psu-current-in": "2.359",
+            "psu-current-out": "40.625",
+            "psu-fan-1-speed": 11904,
+            "psu-temperature-1": "32.0",
+            "psu-temperature-2": "39.0",
+            "psu-temperature-3": "44.0",
+            "psu-voltage-in": "205.0",
+            "psu-voltage-out": "12.0"
+        },
+        "name": "psu-1",
+        "state": {
+            "empty": false,
+            "part-no": "MW2100",
+            "serial-no": "FZ2132RA0509"
+        }
+    },
+    {
+        "config": {
+            "name": "psu-2"
+        },
+        "f5-fan-psu-stats:psu-stats": {
+            "psu-current-in": "0.0",
+            "psu-current-out": "0.0",
+            "psu-fan-1-speed": 0,
+            "psu-temperature-1": "28.0",
+            "psu-temperature-2": "0.0",
+            "psu-temperature-3": "26.0",
+            "psu-voltage-in": "0.0",
+            "psu-voltage-out": "0.875"
+        },
+        "name": "psu-2",
+        "state": {
+            "empty": false,
+            "part-no": "MW2100",
+            "serial-no": "FZ2132RA0042"
+        }
+    }
+]

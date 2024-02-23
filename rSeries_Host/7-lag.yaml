@@ -1,0 +1,83 @@
+---
+- name: LAG
+  hosts: [rSeries]
+  gather_facts: false
+  connection: local
+
+  vars:
+    lag_name: "Arista"
+    lag_interfaces:
+      - "3.0"
+      - "4.0"
+
+  tasks:
+
+  - name: Login via uri (basic auth) Get token
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/aaa'
+      return_content: true
+      force_basic_auth: true
+      method: GET
+      user: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+      headers:
+        Content-Type: application/yang-data+json
+      validate_certs: false
+    register: token
+
+  - name: Get LAG info
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-interfaces:interfaces/interface'
+      return_content: true
+      method: GET
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+    register: lag_info
+
+  - name: Show lag_info
+    ansible.builtin.debug:
+      var: lag_info
+
+  - name: Create LAG Interface
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data'
+      return_content: true
+      method: PATCH
+      body_format: json
+      body: "{{ lookup('ansible.builtin.template', '../j2/lag_create.j2') }}"
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 204
+    register: lag_interface
+
+  - name: Attach LAG to PF
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data'
+      return_content: true
+      method: PATCH
+      body_format: json
+      body: "{{ lookup('ansible.builtin.template', '../j2/lag_inter.j2') }}"
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 204
+    register: lag_attach_pf
+
+  - name: Config LAG
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data'
+      return_content: true
+      method: PATCH
+      body_format: json
+      body: "{{ lookup('ansible.builtin.template', '../j2/lag_lacp.j2') }}"
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 204
+    register: lag_attach_pf

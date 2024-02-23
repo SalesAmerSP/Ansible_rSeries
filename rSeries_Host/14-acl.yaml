@@ -1,0 +1,85 @@
+---
+- name: Create MGMT ACL
+  hosts: [rSeries]
+  gather_facts: false
+  connection: local
+
+  vars:
+    acls:
+      - acl_name: test_cw
+        acl_ip: 172.1.10.0
+        acl_prefixLength: 24
+        acl_port: 443
+      - acl_name: test_cw2
+        acl_ip: 172.1.11.0
+        acl_prefixLength: 24
+        acl_port: 443
+      
+
+  tasks:
+
+  - name: Login via uri (basic auth) Get token
+    tags: basic
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/aaa'
+      return_content: true
+      force_basic_auth: true
+      method: GET
+      user: "{{ ansible_user }}"
+      password: "{{ ansible_password }}"
+      headers:
+        Content-Type: application/yang-data+json
+      validate_certs: false
+    register: token
+
+  - name: Get ACL info 
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/f5-allowed-ips:allowed-ips'
+      return_content: true
+      method: GET
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 200
+    register: acl_info
+
+  - name: Show ACL info
+    ansible.builtin.debug:
+      var: acl_info['json']['f5-allowed-ips:allowed-ips']
+
+  - name: Create ACL
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/f5-allowed-ips:allowed-ips'
+      return_content: true
+      method: POST
+      body_format: json
+      body: "{{ lookup('ansible.builtin.template', '../j2/acl_create.j2') }}"
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 201
+    register: acl_create
+
+  - name: Show acl var
+    ansible.builtin.debug:
+      var: acl_create
+
+  - name: Delete ACL
+    tags: del_acl
+    ansible.builtin.uri:
+      url: 'https://{{ ansible_host }}:{{ ansible_port }}/restconf/data/openconfig-system:system/f5-allowed-ips:allowed-ips/allowed-ip={{ item.acl_name }}'
+      method: DELETE
+      headers:
+        Content-Type: application/yang-data+json
+        X-Auth-Token: "{{ token.x_auth_token }}"
+      validate_certs: false
+      status_code: 204
+    register: acl_del
+    loop: "{{ acls }}"
+
+  - name: Show acl var
+    tags: del_acl
+    ansible.builtin.debug:
+      var: acl_del

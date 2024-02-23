@@ -1,0 +1,13 @@
+tenant_name: "wisetest8"
+tenant_image: "BIG-IP-15.1.8.1-0.0.3.T4-F5OS-qcow2.zip.bundle"
+tenant_mgmt_ip: 10.154.54.208
+mgmt_gw: 10.154.54.254
+#for appliance only 1 node is allowed
+nodes: 
+ - 1
+vlans: 
+  - 10
+  - 911
+  - 912
+cores: 2
+mem: 7680

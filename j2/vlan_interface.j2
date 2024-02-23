@@ -1,0 +1,12 @@
+{
+    "openconfig-vlan:switched-vlan":
+        {"config":
+            {"trunk-vlans":[
+               {% set comma = joiner(",") %}
+                {% for vlan in trunked_vlans %}{{ comma() }}
+                    {{ vlan }}
+                {% endfor %}
+            ]
+        }
+    }
+}
